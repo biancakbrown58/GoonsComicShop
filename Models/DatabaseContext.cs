@@ -9,6 +9,7 @@ namespace GoonsComicShop.Models
   {
 
     public DbSet<Comic> Comics { get; set; }
+    public DbSet<Locations> Locations { get; set; }
     private string ConvertPostConnectionToConnectionString(string connection)
     {
       var _connection = connection.Replace("postgres://", String.Empty);

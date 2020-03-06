@@ -15,28 +15,30 @@ namespace GoonsComicShop.Controllers
   {
     public DatabaseContext db { get; set; } = new DatabaseContext();
 
-    [HttpGet]
-    public List<Comic> GetAllComics()
+    [HttpGet("{LocationsId}")]
+    public List<Comic> GetAllComics(int LocationsId)
     {
-      var comics = db.Comics.OrderBy(c => c.Name);
+      var comics = db.Comics.OrderBy(c => c.Name).Where(q => q.LocationsId == LocationsId);
       return comics.ToList();
     }
 
-    [HttpGet("{id}")]
-    public Comic GetOneComic(int id)
+    [HttpGet("{id}/{LocationId}")]
+    public Comic GetOneComic(int id, int LocationsId)
     {
-      var item = db.Comics.FirstOrDefault(i => i.Id == id);
+      var item = db.Comics.FirstOrDefault(i => i.Id == id);//where
       return item;
     }
+
     [HttpPost]
-    public Comic AddAComic(Comic item)//async
+    public Comic AddAComic(Comic item, int LocationsId)//async
     {
       db.Comics.Add(item);
       db.SaveChanges();//await.db.SaveChanges();
       return item;
     }
-    [HttpPut("{id}")]
-    public Comic UpdateAComic(int id, Comic newData)
+
+    [HttpPut("{id}/{LocationsId}")]
+    public Comic UpdateAComic(int id, Comic newData, int LocationsId)
     {
       newData.Id = id;
       db.Entry(newData).State = EntityState.Modified;
@@ -48,20 +50,25 @@ namespace GoonsComicShop.Controllers
     public List<Comic> OutOfStock(int NumberInStock)
     {
       var comics = db.Comics.Where(i => i.NumberInStock == 0);
-      foreach (var comic in comics)
-      {
-        Console.WriteLine($"{comic.Name}");
-      }
       return comics.ToList();
     }
-    [HttpGet("sku/{sku}")]
-    public Comic GetComicBySku(string sku)
+
+    [HttpGet("numberinstock/{LocationsId}")]
+    public List<Comic> LocationOutOfStock(int NumberInStock, int LocationsId)
     {
-      var item = db.Comics.FirstOrDefault(i => i.Sku == sku);
-      return item;
+      var comics = db.Comics.Where(i => i.NumberInStock == 0).Where(q => q.LocationsId == LocationsId);
+      return comics.ToList();
     }
-    [HttpDelete("{id}")]
-    public ActionResult DeleteAComic(int id)
+
+    [HttpGet("sku/{sku}")]
+    public List<Comic> GetComicBySku(string sku)
+    {
+      var item = db.Comics.Where(i => i.Sku == sku);
+      return item.ToList();
+    }
+
+    [HttpDelete("{id}/{LocationsId}")]
+    public ActionResult DeleteAComic(int id, int LocationsId)
     {
       var item = db.Comics.FirstOrDefault(d => d.Id == id);
       if (item == null)
