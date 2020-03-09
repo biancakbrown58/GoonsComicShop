@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace GoonsComicShop.Models
 {
@@ -13,5 +14,7 @@ namespace GoonsComicShop.Models
     public DateTime DateOrdered { get; set; } = DateTime.Now;
     public int? LocationsId { get; set; }
     public Locations Locations { get; set; }
+
+    public List<ComicOrders> ComicOrders { get; set; } = new List<ComicOrders>();
   }
 }

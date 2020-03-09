@@ -20,13 +20,6 @@ namespace GoonsComicShop.Controllers
     {
       return await db.Locations.OrderBy(l => l.Address).ToListAsync();
     }
-    // [HttpGet]
-    //     public List<Locations> GetAllComics(int Id, string Name)
-    //     {
-
-    //       var comics = db.Locations.OrderBy(c => c.Name);
-    //       return comics.ToList();
-    //     }
 
     [HttpPost]
     public async Task<ActionResult<Locations>> AddLocation(Locations locations)
